@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <time.h>
+
 using namespace std;
 
 
@@ -72,7 +74,11 @@ int main(int argc, char *argv[]){
 		valueWeight.push_back(make_pair(tmp1, tmp2));
 	}
 
+	clock_t start = clock();
 	iterativeBlindSearch(valueWeight, maxWeight);
+	clock_t end = clock();
+
+	cout << "[EXECUTION TIME] " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n";
 
 	return 0;
 }
