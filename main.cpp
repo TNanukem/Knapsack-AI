@@ -11,7 +11,7 @@ using namespace std;
 pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight){
 	// Calculates the number of possibilities
 	int maxNum = 1 << param.size();
-	
+
 	// Iterate through all of the possibilities
 	int maxPoss = 0;
 	double maxValue = -1;
@@ -21,13 +21,13 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 		// Iterate through each bit of the current number
 		for(int bit=0;bit<param.size();bit++){
 			// If the I'th term of the array is in this possibility, put it in the knapsack
-			if((curr >> bit) & 1 == 1){
+			if(((curr >> bit) & 1) == 1){
 				currWeight += param[bit].second;
 				currValue += param[bit].first;
-			} 
+			}
 		}
-		
-		/* 
+
+		/*
 		 * Tests if this possibility is a valid one.
 		 *  If it is and the value is the biggest until now:
 		 * 	Store the current value as the maximum
@@ -47,14 +47,14 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	cout << "Max Value: " << maxValue << endl;
 	// Returns the pair maxValue, maxPoss so the answer can be rebuilt
 	return make_pair(maxValue, maxPoss);
-} 
+}
 
 
 int main(int argc, char *argv[]){
 	/*
-	 * Declares vector of objects and the (n)umber of objects 
+	 * Declares vector of objects and the (n)umber of objects
 	 */
-	vector <pair<double, double>> valueWeight;	
+	vector <pair<double, double>> valueWeight;
 	int n;
 	double maxWeight;
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
 	double tmp1, tmp2;
 	cout << "Please insert the number of elements and the max supported weight by the knapsack" << endl;
 	cin >> n >> maxWeight;
-	
+
 	cout << "Please insert the pair of value weight at the knapsack" << endl;
 	for(int i=0;i<n;i++){
 		cin >> tmp1 >> tmp2;
@@ -73,6 +73,6 @@ int main(int argc, char *argv[]){
 	}
 
 	iterativeBlindSearch(valueWeight, maxWeight);
-	
-	return 0;	
+
+	return 0;
 }
