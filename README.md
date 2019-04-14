@@ -11,7 +11,7 @@ This project was originally developed by:
     Estevam Arantes (https://github.com/Es7evam)
     Henrique Andrews (https://github.com/AndrewsHPM)
     Henry Suzukawa (https://github.com/HSuzu)
-    Osmar ()
+    Osmar Chen (https://github.com/osmarchen)
     Tiago Toledo Jr (https://github.com/TNanukem)
 
 # Description and Objectives
