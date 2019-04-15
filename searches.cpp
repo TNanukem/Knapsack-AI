@@ -142,3 +142,16 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	// Retorna o par maxValue, maxPoss para que a resposta possa ser reescrita
 	return make_pair(maxValue, maxPoss);
 }
+
+// Retorna o valor máximo
+double recursiveBlindSearch(vector<pair<double, double>> param, double maxWeight, int curIdx, double curWeight, double curValue){
+	if(curIdx >= param.size()){
+		return 0;
+	}
+	if(curWeight > maxWeight){
+		return -0x3f3f3f3f;
+	}
+	double valcoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight + param[curIdx].second, curValue + param[curIdx].first);
+	double valncoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight, curValue);
+	return max(valcoloca, valncoloca);
+}

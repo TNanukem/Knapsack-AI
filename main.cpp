@@ -61,13 +61,19 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	// Execução da Busca Cega
+	// Execução da Busca Cega Iterativa
 	clock_t start = clock();
 	iterativeBlindSearch(valueWeight, maxWeight);
 	clock_t end = clock();
 
-	cout << "[TEMPO DE EXECUCAO] Blind search: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
+	cout << "[TEMPO DE EXECUCAO] Blind search iterativo: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 
+	// Execução da Busca Cega Recursiva
+	start = clock();
+	recursiveBlindSearch(valueWeight, maxWeight, 0, 0, 0);
+	end = clock();
+
+	cout << "[TEMPO DE EXECUCAO] Blind search recusivo: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 	// Execução do algoritmo Best-Fit
 	start = clock();
 	bestFitSearch(valueWeight, maxWeight);
