@@ -1,3 +1,18 @@
+/*
+	Trabalho 1 de Inteligência Artificial
+	Resolução do problema de uma mochila binária (knapsack)
+	utilizando algoritmos de busca cega e busca heurística.
+
+	Desenvolvido por:
+	Augusto Ribeiro (https://github.com/GuttinRibeiro)
+	Bruno Arantes (https://github.com/brunoaamello)
+	Estevam Arantes (https://github.com/Es7evam)
+	Henrique Andrews (https://github.com/AndrewsHPM)
+	Henry Suzukawa (https://github.com/HSuzu)
+	Osmar Chen (https://github.com/osmarchen)
+	Tiago Toledo Jr (https://github.com/TNanukem)
+
+*/
 #include <bitset>
 #include <cstdio>
 #include <iostream>
@@ -36,9 +51,16 @@ int findMaxPos(vector<pair<double, int>> v) {
 	return pos_max;
 }
 
+/* Função que realiza a busca por meio do algoritmo Best-Fit levando em consideração
+	a heurística de maximizar o quociente valor/peso. Recebe como argumentos de entrada
+	o vetor de objetos e o tamanho máximo da mochila.
+*/
+
 void bestFitSearch(vector<pair<double, double>> param, double maxWeight) {
 	// param: pares da forma valor - peso
 	vector<pair<double, int>> costPerWeight;
+
+	// Monta um vetor com valor/peso para realizar uma heurística gulosa
 	for(int i = 0; i < (int)param.size(); i++) {
 		costPerWeight.push_back(make_pair(param[i].first/param[i].second, 0));
 		// cout << "cost/weight: " << costPerWeight[i].first << "\n";
@@ -62,6 +84,7 @@ void bestFitSearch(vector<pair<double, double>> param, double maxWeight) {
 
 		//Escolhe novo vizinho
 		neighbor = findMaxPos(costPerWeight);
+
 		//Condição de parada: não haver mais vizinhos possíveis
 		if(neighbor == -1) {
 			loop_control = 0;
@@ -77,31 +100,36 @@ void bestFitSearch(vector<pair<double, double>> param, double maxWeight) {
 }
 
 
+/* Implementação de uma busca cega para a resolução do problema. Recebe como argumentos
+	de entrada a lista de objetos e o tamanho máximo da mochila. Então, itera sobre todas
+	as possibilidades de inserção até encontrar a solução ótima.
+*/
 pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight){
-	// Calculates the number of possibilities
+	// Calcula o número de possibilidades
 	int maxNum = 1 << param.size();
 
-	// Iterate through all of the possibilities
+	// Itera sobre todas as possibilidades
 	int maxPoss = 0;
 	double maxValue = -1;
 	for(int curr=0;curr<maxNum;curr++){
 		double currWeight = 0, currValue = 0;
 
-		// Iterate through each bit of the current number
+		// Itera sobre cada bit do número atual
 		for(int bit=0;bit<(int)param.size();bit++){
-			// If the I'th term of the array is in this possibility, put it in the knapsack
+
+			// Se o I-ésimo termo do vetor está na possibilidade, coloque na mochila
 			if(((curr >> bit) & 1) == 1){
 				currWeight += param[bit].second;
 				currValue += param[bit].first;
 			}
 		}
 
-		/*
-		 * Tests if this possibility is a valid one.
-		 *  If it is and the value is the biggest until now:
-		 * 	Store the current value as the maximum
-		 * 	Store the current possibility as the best
-		 */
+		  /* Testa se a possibilidade é válida.
+		  *  Se ela for e o valor é o maior até agora:
+		  * 	Armazena o valor atual como máximo
+		  * 	Armazena a possibilidade atual como a melhor.
+		  */
+
 		if(currWeight <= maxWeight && currValue > maxValue){
 			cerr << "Change maxValue = " << currValue << endl;
 			maxPoss = curr;
@@ -109,20 +137,20 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 		}
 	}
 
-	/* Testing if the answer is ok */
+	// Testando se a solução é válida
 	bitset<8>answ(maxPoss);
 	cerr << endl << "Answer " << answ << endl;
 
 	cout << "Max Value: " << maxValue << endl;
-	// Returns the pair maxValue, maxPoss so the answer can be rebuilt
+	// Retorna o par maxValue, maxPoss para que a resposta possa ser reescrita
 	return make_pair(maxValue, maxPoss);
 }
 
 
 int main(int argc, char *argv[]){
-	/*
-	 * Declares vector of objects and the (n)umber of objects
-	 */
+
+	// Declara um vetor de objetos e o (n)úmero de objetos
+
 	vector <pair<double, double>> valueWeight;
 	int n;
 	double maxWeight;
@@ -131,10 +159,10 @@ int main(int argc, char *argv[]){
 	fstream inFile;
 
 
-	/*
-	 * Scans the n objects and pushes it into the vector
-	 * The objects are composed by it's value and weight
+	 /* Escaneia os n objetos e insere eles no vetor
+	 * Os objetos são compostos pelo par valor e peso
 	 */
+	 
 	double tmp1, tmp2;
 	if(argc < 2){
 		cout << "Please insert the number of elements and the max supported weight by the knapsack" << endl;
@@ -160,12 +188,14 @@ int main(int argc, char *argv[]){
 		}
 	}
 
+	// Execução da Busca Cega
 	clock_t start = clock();
 	iterativeBlindSearch(valueWeight, maxWeight);
 	clock_t end = clock();
 
 	cout << "[EXECUTION TIME] Blind search: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 
+	// Execução do algoritmo Best-Fit
 	start = clock();
 	bestFitSearch(valueWeight, maxWeight);
 	end = clock();
