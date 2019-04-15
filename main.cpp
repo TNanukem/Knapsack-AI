@@ -7,7 +7,73 @@
 
 using namespace std;
 
+int findMaxPos(vector<pair<double, int>> v) {
+	// Formato de v: valor - validade. Validade = 0 => valor válido
 
+	if(v.size() < 1) {
+		return -1;
+	}
+
+	// Procura o primeiro valor válido no vetor repassado:
+	int pos_max = 0;
+	while (v[pos_max].second == 1 && pos_max < (int)v.size()) {
+		pos_max++;
+	}
+
+	// Se todos os valores são inválidos:
+	if(pos_max == (int)v.size()) {
+		return -1;
+	}
+
+	// Acha a posição do maior valor dentre os valores válidos:
+	for(int i = pos_max+1; i < (int)v.size(); i++) {
+		if(v[i].second == 0 && v[i].first > v[pos_max].first) {
+			pos_max = i;
+		}
+	}
+
+	return pos_max;
+}
+
+void hillClimbingSearch(vector<pair<double, double>> param, double maxWeight) {
+	// param: pares da forma valor - peso
+	vector<pair<double, int>> costPerWeight;
+	for(int i = 0; i < (int)param.size(); i++) {
+		costPerWeight.push_back(make_pair(param[i].first/param[i].second, 0));
+		// cout << "cost/weight: " << costPerWeight[i].first << "\n";
+	}
+
+	double currWeight = 0.0;
+	int loop_control = 1;
+	int neighbor = findMaxPos(costPerWeight);
+	vector<int> selected;
+
+	while(loop_control) {
+
+		//Marca como escolhido
+		costPerWeight[neighbor].second = 1;
+
+		//Checa se o escolhido pode ser adiconado
+		if(currWeight + param[neighbor].second <= maxWeight) {
+			currWeight += param[neighbor].second;
+			selected.push_back(neighbor);
+		}
+
+		//Escolhe novo vizinho
+		neighbor = findMaxPos(costPerWeight);
+		//Condição de parada: não haver mais vizinhos possíveis
+		if(neighbor == -1) {
+			loop_control = 0;
+		}
+	}
+
+	cout << "Carga total: " << currWeight << "\n";
+	cout << "Itens: " << "\n";
+
+	for(int i = 0; i < (int)selected.size(); i++) {
+		cout << "id: " << selected[i] << " | valor: " << param[selected[i]].first << " | peso: " << param[selected[i]].second << "\n";
+	}
+}
 
 
 pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight){
@@ -21,7 +87,7 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 		double currWeight = 0, currValue = 0;
 
 		// Iterate through each bit of the current number
-		for(int bit=0;bit<param.size();bit++){
+		for(int bit=0;bit<(int)param.size();bit++){
 			// If the I'th term of the array is in this possibility, put it in the knapsack
 			if(((curr >> bit) & 1) == 1){
 				currWeight += param[bit].second;
@@ -78,7 +144,13 @@ int main(int argc, char *argv[]){
 	iterativeBlindSearch(valueWeight, maxWeight);
 	clock_t end = clock();
 
-	cout << "[EXECUTION TIME] " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n";
+	cout << "[EXECUTION TIME] Blind search: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
+
+	start = clock();
+	hillClimbingSearch(valueWeight, maxWeight);
+	end = clock();
+
+	cout << "[EXECUTION TIME] Hill climbing: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 
 	return 0;
 }
