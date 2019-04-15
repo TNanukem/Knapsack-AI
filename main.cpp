@@ -36,7 +36,7 @@ int findMaxPos(vector<pair<double, int>> v) {
 	return pos_max;
 }
 
-void hillClimbingSearch(vector<pair<double, double>> param, double maxWeight) {
+void bestFitSearch(vector<pair<double, double>> param, double maxWeight) {
 	// param: pares da forma valor - peso
 	vector<pair<double, int>> costPerWeight;
 	for(int i = 0; i < (int)param.size(); i++) {
@@ -167,10 +167,10 @@ int main(int argc, char *argv[]){
 	cout << "[EXECUTION TIME] Blind search: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 
 	start = clock();
-	hillClimbingSearch(valueWeight, maxWeight);
+	bestFitSearch(valueWeight, maxWeight);
 	end = clock();
 
-	cout << "[EXECUTION TIME] Hill climbing: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
+	cout << "[EXECUTION TIME] Best fit: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 
 	return 0;
 }
