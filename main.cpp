@@ -102,7 +102,7 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 		 * 	Store the current value as the maximum
 		 * 	Store the current possibility as the best
 		 */
-		if(currWeight < maxWeight && currValue > maxValue){
+		if(currWeight <= maxWeight && currValue > maxValue){
 			cerr << "Change maxValue = " << currValue << endl;
 			maxPoss = curr;
 			maxValue = currValue;
