@@ -57,7 +57,7 @@ int findMaxPos(vector<pair<double, int>> v) {
 */
 
 void bestFitSearch(vector<pair<double, double>> param, double maxWeight) {
-	cout << "\nEXECUTANDO A BEST-FIT SEARCH" << "\n\n";
+	cout << "\nEXECUTANDO A BEST-FIT SEARCH" << "\n";
 	// param: pares da forma valor - peso
 	vector<pair<double, int>> costPerWeight;
 
@@ -97,7 +97,7 @@ void bestFitSearch(vector<pair<double, double>> param, double maxWeight) {
 
 	// Fazendo a impressão da resposta em tela
 	cout << "Numero de Passos:" << count << "\n";
-	cout << "Carga total: " << currWeight << "\n";
+	//cout << "Carga total: " << currWeight << "\n";
 	cout << "Itens: " << "\n";
 
 	for(int i = 0; i < (int)selected.size(); i++) {
@@ -150,9 +150,9 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	bitset<8>answ(maxPoss);
 
 	// Fazendo a impressão da resposta em tela
-	cerr << endl << "Resposta binaria: " << answ << endl;
+	//cerr << endl << "Resposta binaria: " << answ << endl;
 
-	cout << "Valor maximo: " << maxValue << endl;
+	//cout << "Valor maximo: " << maxValue << endl;
 
 	cout << "Numero de Passos:" << count << "\n";
 
