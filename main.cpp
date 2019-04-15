@@ -5,9 +5,9 @@
 #include <utility>
 #include <time.h>
 
+#include <fstream>
+
 using namespace std;
-
-
 
 
 pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight){
@@ -59,19 +59,38 @@ int main(int argc, char *argv[]){
 	vector <pair<double, double>> valueWeight;
 	int n;
 	double maxWeight;
-
+	
+	// Interface com arquivo
+	fstream inFile;
+	
+	
 	/*
 	 * Scans the n objects and pushes it into the vector
 	 * The objects are composed by it's value and weight
 	 */
 	double tmp1, tmp2;
-	cout << "Please insert the number of elements and the max supported weight by the knapsack" << endl;
-	cin >> n >> maxWeight;
-
-	cout << "Please insert the pair of value weight at the knapsack" << endl;
-	for(int i=0;i<n;i++){
-		cin >> tmp1 >> tmp2;
-		valueWeight.push_back(make_pair(tmp1, tmp2));
+	if(argc < 2){
+		cout << "Please insert the number of elements and the max supported weight by the knapsack" << endl;
+		cin >> n >> maxWeight;
+		cout << "Please insert the pair of value weight at the knapsack" << endl;
+	}else{
+		inFile.open(argv[1], ios::in);
+		if(!inFile.is_open()){
+			cout << "Error openning file!" << endl;
+			exit(1);
+		}
+		inFile >> n >> maxWeight;
+	}
+	if(argc < 2){
+		for(int i=0;i<n;i++){
+			cin >> tmp1 >> tmp2;
+			valueWeight.push_back(make_pair(tmp1, tmp2));
+		}
+	}else{
+		for(int i=0;i<n;i++){
+			inFile >> tmp1 >> tmp2;
+			valueWeight.push_back(make_pair(tmp1, tmp2));
+		}
 	}
 
 	clock_t start = clock();
