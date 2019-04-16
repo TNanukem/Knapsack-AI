@@ -82,5 +82,13 @@ int main(int argc, char *argv[]){
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
 
+	// Execução do algoritmo Branch & Bound
+	cout << "\nEXECUTANDO A BRANCH AND BOUND" << "\n";
+	start = clock();
+	branchAndBound(valueWeight, maxWeight, ids, &count);
+	end = clock();
+
+	printResult(valueWeight, start, end, ids, count);
+	ids.clear();
 	return 0;
 }

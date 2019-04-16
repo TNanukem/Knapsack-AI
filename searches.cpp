@@ -3,9 +3,15 @@
 void printResult(vector<pair<double,double>> weights, clock_t start, clock_t end, vector<int> ids, int count){
 	cout << "Numero de passos: " << count << "\n";
 	cout << "Itens: " << "\n";
+	int valueSum = 0;
+	int weight = 0;
+
 	for(int i = 0; i < ids.size(); i++){
 		cout << "id: " << ids[i] << " | valor: " << weights[ids[i]].first << " | peso: " << weights[ids[i]].second << "\n";
+		valueSum +=  weights[ids[i]].first;
+		weight   += weights[ids[i]].second;
 	}
+	cout << "Valor Total: " << valueSum << ", Peso Total: " << weight << "\n";
 	cout << "[TEMPO DE EXECUCAO]: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 }
 
@@ -141,4 +147,143 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	*count = number;
 	// Retorna o par maxValue, maxPoss para que a resposta possa ser reescrita
 	return make_pair(maxValue, maxPoss);
+}
+
+
+/* Branch and Bound */
+/* Função de comparação de pesos proporcionais
+ * true é retornado se o primeiro argumento deve ser posicionado antes do que o segundo */
+bool weightsCmp(pair<double, int> &w1, pair<double, int> &w2) {
+	return w1.first > w2.first;
+}
+
+/* Implementação que busca solução relaxada do problema
+ * de mochila binária (ou seja, solução do problema de
+ * mochila inteira)
+ * Retorno: true se o problema é factível */
+bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, vector<double> &qtd, vector<bool> fixedValues, int *count, double *finalWeight) {
+	if(maxWeight < 0) {
+		return false;
+	}
+
+	/* Vetor que guarda o valor proporcial (valor/peso) e a id do objeto */
+	vector<pair<double, int>> proportionalValue;
+	proportionalValue.reserve(param.size());
+
+	for(int i = 0; i < param.size(); i++) {
+//		*count++;
+		double pweight;
+		if(fixedValues[i] == false) { // se o item não foi selecionado previamente
+			pweight  = param[i].first/param[i].second;
+		} else { // se o item já foi selecionado preciamente, ele será desconsiderado.
+			pweight  = 0;
+		}
+		proportionalValue.push_back(make_pair(pweight, i));
+	}
+
+	sort(proportionalValue.begin(), proportionalValue.end(), weightsCmp);
+
+	if(proportionalValue[0].first == 0) {
+		return false;
+	}
+
+	float bag_weight = 0;
+	int bag_full = 1;
+	for(int i = 0; i < proportionalValue.size(); i++) {
+		*count++;
+		int idx = proportionalValue[i].second;
+		if(fixedValues[idx] == false) {
+			if(bag_full) {
+				int weight = param[idx].second;
+				if(weight < maxWeight) {
+					maxWeight -= weight;
+					bag_weight += weight;
+					qtd[idx] = 1;
+				} else {
+					qtd[idx] = maxWeight/weight;
+					bag_weight += maxWeight;
+					maxWeight = 0;
+					bag_full = 0;
+				}
+			} else {
+				qtd[idx] = 0;
+			}
+		}
+	}
+
+	*finalWeight = bag_weight;
+
+	return true;
+}
+
+void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWeight, vector<double> &qtd, vector<bool> &fixedValues, int *count, double *currMax, vector<int> &currSolution) {
+	double weight = 0;
+
+	bool isPossible = relaxedKsnapsack(param, maxWeight, qtd, fixedValues, count, &weight);
+
+	/* Teste de sondagem.. Se o problema for infactível ou a solução é pior do que
+	 * uma solução já existente, a solução não é desenvolvida */
+	if(isPossible == false || weight < *currMax) {
+		return;
+	}
+
+	bool allInteger = true;
+	vector<pair<double, int>> dist; // vetor de distancia de 0.5 até qtd
+	dist.reserve(qtd.size());
+	for(int i = 0; i < qtd.size(); i++) {
+		if(qtd[i] == 0 || qtd[i] == 1) {
+			dist.push_back(make_pair(0.5, i));
+		} else {
+			allInteger = false;
+			dist.push_back(make_pair(abs(0.5 - qtd[i]), i));
+		}
+	}
+
+	if(allInteger) { // se todos são inteiros, achamos uma solução para o problema
+		if(weight > *currMax) { // se a solução é melhor do que já temos, guardamos essa solução
+			currSolution.clear();
+			*currMax = weight;
+			for(int i = 0; i < qtd.size(); i++) {
+				if(qtd[i] == 1) {
+					currSolution.push_back(i);
+				}
+			}
+		}
+	} else { // se a solução tem um valor não inteiro ..
+		// selecionamos o item mais fracionado (mais perto de 0.5) ..
+		sort(dist.begin(), dist.end(), weightsCmp);
+		int idx = dist.back().second;
+		fixedValues[idx] = true;
+
+		// e rodamos o algorítmo novamente setando a quantidade desse item
+		qtd[idx] = 0;
+		branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, currMax, currSolution);
+
+		qtd[idx] = 1;
+		double newMaxWeight = maxWeight - param[idx].second;
+		branchAndBound_recursive(param, newMaxWeight, qtd, fixedValues, count, currMax, currSolution);
+
+		fixedValues[idx] = false;
+	}
+}
+
+void branchAndBound(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, int *count) {
+	double currMax = 0;
+	vector<int> bestSolution;
+	// bestSolution.reserve(param.size());
+
+	vector<bool> fixedValues;
+	fixedValues.reserve(param.size());
+
+	vector<double> qtd;
+	qtd.reserve(param.size());
+
+	for(int i = 0; i < param.size(); i++) {
+		fixedValues.push_back(false);
+		qtd.push_back(0);
+	}
+
+	branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, &currMax, bestSolution);
+
+	idx = bestSolution;
 }
