@@ -17,3 +17,9 @@ This project was originally developed by:
 # Description and Objectives
 
 The main objective of this assignment is to use blind-searches and heuristic searches in order to find a solution to our problem.
+
+# To-Do
+* Branch and Bound Algorithm
+* Scripted version to generate the output (Grande)
+* Python script for Data Analysis (Grande)
+* Report
