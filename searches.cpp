@@ -161,7 +161,7 @@ bool weightsCmp(pair<double, int> &w1, pair<double, int> &w2) {
  * de mochila binária (ou seja, solução do problema de
  * mochila inteira)
  * Retorno: true se o problema é factível */
-bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, vector<double> &qtd, vector<bool> fixedValues, int *count, double *finalWeight) {
+bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, vector<double> &qtd, vector<bool> fixedValues, int *count, double *finalValue) {
 	if(maxWeight < 0) {
 		return false;
 	}
@@ -176,32 +176,32 @@ bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, v
 		if(fixedValues[i] == false) { // se o item não foi selecionado previamente
 			pweight  = param[i].first/param[i].second;
 		} else { // se o item já foi selecionado preciamente, ele será desconsiderado.
-			pweight  = 0;
+			pweight  = -1;
 		}
 		proportionalValue.push_back(make_pair(pweight, i));
 	}
 
 	sort(proportionalValue.begin(), proportionalValue.end(), weightsCmp);
 
-	if(proportionalValue[0].first == 0) {
-		return false;
-	}
-
-	float bag_weight = 0;
+	double bag_value  = 0;
+	double bag_weight = 0;
 	int bag_full = 1;
 	for(int i = 0; i < proportionalValue.size(); i++) {
 		// *count++;
 		int idx = proportionalValue[i].second;
+		double weight = param[idx].second;
+		double value  = param[idx].first;
 		if(fixedValues[idx] == false) {
 			if(bag_full) {
-				int weight = param[idx].second;
 				if(weight < maxWeight) {
 					maxWeight -= weight;
 					bag_weight += weight;
+					bag_value  += value;
 					qtd[idx] = 1;
 				} else {
 					qtd[idx] = maxWeight/weight;
 					bag_weight += maxWeight;
+					bag_value += value * qtd[idx];
 					maxWeight = 0;
 					bag_full = 0;
 				}
@@ -211,20 +211,21 @@ bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, v
 		}
 	}
 
-	*finalWeight = bag_weight;
+	*finalValue += bag_value;
 
 	return true;
 }
 
-void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWeight, vector<double> &qtd, vector<bool> &fixedValues, int *count, double *currMax, vector<int> &currSolution) {
+void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWeight, vector<double> &qtd, vector<bool> &fixedValues, int *count, double *currMax, vector<int> &currSolution, double initValue) {
 	(*count)++;
-	double weight = 0;
+	double value = initValue;
 
-	bool isPossible = relaxedKsnapsack(param, maxWeight, qtd, fixedValues, count, &weight);
+	bool isPossible = relaxedKsnapsack(param, maxWeight, qtd, fixedValues, count, &value);
+	// std::cout << value << "\n";
 
 	/* Teste de sondagem.. Se o problema for infactível ou a solução é pior do que
 	 * uma solução já existente, a solução não é desenvolvida */
-	if(isPossible == false || weight < *currMax) {
+	if(isPossible == false || value < *currMax) {
 		return;
 	}
 
@@ -241,9 +242,9 @@ void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWei
 	}
 
 	if(allInteger) { // se todos são inteiros, achamos uma solução para o problema
-		if(weight > *currMax) { // se a solução é melhor do que já temos, guardamos essa solução
+		if(value > *currMax) { // se a solução é melhor do que já temos, guardamos essa solução
 			currSolution.clear();
-			*currMax = weight;
+			*currMax = value;
 			for(int i = 0; i < qtd.size(); i++) {
 				if(qtd[i] == 1) {
 					currSolution.push_back(i);
@@ -258,11 +259,12 @@ void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWei
 
 		// e rodamos o algorítmo novamente setando a quantidade desse item
 		qtd[idx] = 0;
-		branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, currMax, currSolution);
+		branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, currMax, currSolution, initValue);
 
 		qtd[idx] = 1;
-		double newMaxWeight = maxWeight - param[idx].second;
-		branchAndBound_recursive(param, newMaxWeight, qtd, fixedValues, count, currMax, currSolution);
+		maxWeight -= param[idx].second;
+		initValue += param[idx].first;
+		branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, currMax, currSolution, initValue);
 
 		fixedValues[idx] = false;
 	}
@@ -285,7 +287,8 @@ void branchAndBound(vector<pair<double, double>> param, double maxWeight, vector
 		qtd.push_back(0);
 	}
 
-	branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, &currMax, bestSolution);
+	branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, &currMax, bestSolution, 0);
+// cout << currMax;
 
 	idx = bestSolution;
 }
