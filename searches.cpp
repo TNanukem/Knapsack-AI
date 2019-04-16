@@ -88,7 +88,7 @@ void bestFitSearch(vector<pair<double, double>> param, double maxWeight) {
 	as possibilidades de inserção até encontrar a solução ótima.
 */
 pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight){
-	cout << "\nEXECUTANDO A BLIND SEARCH" << "\n";
+	cout << "\nEXECUTANDO A BLIND SEARCH ITERATIVA" << "\n";
 
 	// Calcula o número de possibilidades
 	int maxNum = 1 << param.size();
@@ -144,14 +144,15 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 }
 
 // Retorna o valor máximo
-double recursiveBlindSearch(vector<pair<double, double>> param, double maxWeight, int curIdx, double curWeight, double curValue){
+double recursiveBlindSearch(vector<pair<double, double>> param, double maxWeight, int curIdx, double curWeight, double curValue, int *count){
+	*count = *count + 1;
 	if(curIdx >= param.size()){
 		return 0;
 	}
 	if(curWeight > maxWeight){
 		return -0x3f3f3f3f;
 	}
-	double valcoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight + param[curIdx].second, curValue + param[curIdx].first);
-	double valncoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight, curValue);
+	double valcoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight + param[curIdx].second, curValue + param[curIdx].first, count);
+	double valncoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight, curValue, count);
 	return max(valcoloca, valncoloca);
 }

@@ -69,10 +69,13 @@ int main(int argc, char *argv[]){
 	cout << "[TEMPO DE EXECUCAO] Blind search iterativo: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 
 	// Execução da Busca Cega Recursiva
+	int mycount = 0;
+	cout << "EXECUTANDO A BLIND SEARCH RECUSIVA" << endl;
 	start = clock();
-	recursiveBlindSearch(valueWeight, maxWeight, 0, 0, 0);
+	recursiveBlindSearch(valueWeight, maxWeight, 0, 0, 0, &mycount);
 	end = clock();
 
+	cout << "Numero de Passos:" << mycount << "\n";
 	cout << "[TEMPO DE EXECUCAO] Blind search recusivo: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 	// Execução do algoritmo Best-Fit
 	start = clock();
