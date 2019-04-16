@@ -126,12 +126,12 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	}
 
 	// Testando se a solução é válida
-	bitset<8>answ(maxPoss);
+	bitset<16>answ(maxPoss);
 
 	// Fazendo a impressão da resposta em tela
-	//cerr << endl << "Resposta binaria: " << answ << endl;
+	cerr << endl << "Resposta binaria: " << answ << endl;
 
-	//cout << "Valor maximo: " << maxValue << endl;
+	cout << "Valor maximo: " << maxValue << endl;
 
 	for(int i = 0; i < (int)answ.size(); i++){
 		if(answ[i] == 1){
