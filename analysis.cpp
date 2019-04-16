@@ -12,10 +12,8 @@
 	Osmar Chen (https://github.com/osmarchen)
 	Tiago Toledo Jr (https://github.com/TNanukem)
 
-	Este arquivo é o executavel da interface com o usuário, utilize-o para
-	verificar o funcionamento do trabalho.
-
-	Você pode utilizar algum dos casos de teste disponíveis na pasta tests.
+	Esse é um arquivo feito para gerar um .csv que será analisado por um
+	script em Python. Por favor, não o execute na linha de comando.
 
 */
 #include "searches.h"
@@ -41,13 +39,11 @@ int main(int argc, char *argv[]){
 
 	double tmp1, tmp2;
 	if(argc < 2){
-		cout << "Por favor insira o numero maximo de elementos e o peso maximo da mochila" << endl;
 		cin >> n >> maxWeight;
-		cout << "Por favor, insira os pares valor peso dos itens a serem colocados na mochila" << endl;
 	}else{
 		inFile.open(argv[1], ios::in);
 		if(!inFile.is_open()){
-			cout << "Erro ao abrir o arquivo!" << endl;
+
 			exit(1);
 		}
 		inFile >> n >> maxWeight;
@@ -64,22 +60,41 @@ int main(int argc, char *argv[]){
 		}
 	}
 
+
 	// Execução da Busca Cega
-	cout << "\nEXECUTANDO A BLIND SEARCH" << "\n";
 	clock_t start = clock();
 	iterativeBlindSearch(valueWeight, maxWeight, ids, &count);
 	clock_t end = clock();
 
-	printResult(valueWeight, start, end, ids, count);
+	cout << n << ",Blind Search," << count << "," << 1000*(float)(end-start)/CLOCKS_PER_SEC << ",";
+	for(int i = 0; i < ids.size(); i++){
+		cout << ids[i] << " ";
+	}
+	cout << ",";
+
+	vector<int> right_answer = ids;
+	for(int i = 0; i < right_answer.size(); i++){
+		cout << right_answer[i] << " ";
+	}
+	cout << "\n";
+
 	ids.clear();
 
 	// Execução do algoritmo Best-Fit
-	cout << "\nEXECUTANDO A BEST-FIT SEARCH" << "\n";
 	start = clock();
 	bestFitSearch(valueWeight, maxWeight, ids, &count);
 	end = clock();
 
-	printResult(valueWeight, start, end, ids, count);
+	cout << n << ",Best-Fit Search," << count << "," << 1000*(float)(end-start)/CLOCKS_PER_SEC << ",";
+	for(int i = 0; i < ids.size(); i++){
+		cout << ids[i] << " ";
+	}
+	cout << ",";
+	for(int i = 0; i < right_answer.size(); i++){
+		cout << right_answer[i] << " ";
+	}
+	cout << "\n";
+
 	ids.clear();
 
 	return 0;

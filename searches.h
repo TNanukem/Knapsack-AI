@@ -8,6 +8,7 @@
 
 using namespace std;
 
+void printResult(vector<pair<double,double>> weights, clock_t start, clock_t end, vector<int> ids, int count);
 int findMaxPos(vector<pair<double, int>> v);
-void bestFitSearch(vector<pair<double, double>> param, double maxWeight) ;
-pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight);
+void bestFitSearch(vector<pair<double, double>> param, double maxWeight, vector<int> &ids, int *count) ;
+pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight, vector<int> &ids, int *count);
