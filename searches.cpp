@@ -190,7 +190,7 @@ bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, v
 	float bag_weight = 0;
 	int bag_full = 1;
 	for(int i = 0; i < proportionalValue.size(); i++) {
-		*count++;
+		// *count++;
 		int idx = proportionalValue[i].second;
 		if(fixedValues[idx] == false) {
 			if(bag_full) {
@@ -217,6 +217,7 @@ bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, v
 }
 
 void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWeight, vector<double> &qtd, vector<bool> &fixedValues, int *count, double *currMax, vector<int> &currSolution) {
+	(*count)++;
 	double weight = 0;
 
 	bool isPossible = relaxedKsnapsack(param, maxWeight, qtd, fixedValues, count, &weight);
@@ -268,6 +269,7 @@ void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWei
 }
 
 void branchAndBound(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, int *count) {
+	*count = 0;
 	double currMax = 0;
 	vector<int> bestSolution;
 	// bestSolution.reserve(param.size());
