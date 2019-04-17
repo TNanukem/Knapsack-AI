@@ -270,7 +270,7 @@ void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWei
 	}
 }
 
-void branchAndBound(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, int *count) {
+void branchAndBoundDepthFirst(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, int *count) {
 	*count = 0;
 	double currMax = 0;
 	vector<int> bestSolution;
@@ -289,6 +289,97 @@ void branchAndBound(vector<pair<double, double>> param, double maxWeight, vector
 
 	branchAndBound_recursive(param, maxWeight, qtd, fixedValues, count, &currMax, bestSolution, 0);
 // cout << currMax;
+
+	idx = bestSolution;
+}
+
+void branchAndBoundBreadthFirst(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, int *count) {
+	*count = 0;
+	double currMax = 0;
+	vector<int> bestSolution;
+	// bestSolution.reserve(param.size());
+
+	vector<bool> fixedValues;
+	fixedValues.reserve(param.size());
+
+	vector<double> qtd;
+	qtd.reserve(param.size());
+
+	for(int i = 0; i < param.size(); i++) {
+		fixedValues.push_back(false);
+		qtd.push_back(0);
+	}
+
+	queue<BBFuncArgs> bbqueue;
+
+	BBFuncArgs tmp;
+	tmp.maxWeight = maxWeight;
+	tmp.fixedValues = fixedValues;
+	tmp.qtd = qtd;
+	tmp.initValue = 0;
+
+	bbqueue.push(tmp);
+
+	while(bbqueue.size() > 0) {
+		(*count)++;
+
+		BBFuncArgs currentArgs = bbqueue.front();
+		bbqueue.pop();
+
+		double value = currentArgs.initValue;
+
+		bool isPossible = relaxedKsnapsack(param, currentArgs.maxWeight, currentArgs.qtd, currentArgs.fixedValues, count, &value);
+		// std::cout << value << "\n";
+
+		/* Teste de sondagem.. Se o problema for infactível ou a solução é pior do que
+		 * uma solução já existente, a solução não é desenvolvida */
+		if(isPossible && value > currMax) {
+			bool allInteger = true;
+			vector<pair<double, int>> dist; // vetor de distancia de 0.5 até qtd
+			dist.reserve(currentArgs.qtd.size());
+			for(int i = 0; i < currentArgs.qtd.size(); i++) {
+				if(currentArgs.qtd[i] == 0 || currentArgs.qtd[i] == 1) {
+					dist.push_back(make_pair(0.5, i));
+				} else {
+					allInteger = false;
+					dist.push_back(make_pair(abs(0.5 - currentArgs.qtd[i]), i));
+				}
+			}
+
+			if(allInteger) { // se todos são inteiros, achamos uma solução para o problema
+				if(value > currMax) { // se a solução é melhor do que já temos, guardamos essa solução
+					bestSolution.clear();
+					currMax = value;
+					for(int i = 0; i < currentArgs.qtd.size(); i++) {
+						if(currentArgs.qtd[i] == 1) {
+							bestSolution.push_back(i);
+						}
+					}
+				}
+			} else { // se a solução tem um valor não inteiro ..
+				// selecionamos o item mais fracionado (mais perto de 0.5) ..
+				sort(dist.begin(), dist.end(), weightsCmp);
+				int idx = dist.back().second;
+				currentArgs.fixedValues[idx] = true;
+
+				// e rodamos o algorítmo novamente setando a quantidade desse item
+				currentArgs.qtd[idx] = 0;
+				tmp.maxWeight = currentArgs.maxWeight;
+				tmp.fixedValues = currentArgs.fixedValues;
+				tmp.qtd = currentArgs.qtd;
+				tmp.initValue = currentArgs.initValue;
+
+				bbqueue.push(tmp);
+
+				currentArgs.qtd[idx] = 1;
+				tmp.maxWeight = currentArgs.maxWeight -  param[idx].second;
+				tmp.fixedValues = currentArgs.fixedValues;
+				tmp.qtd = currentArgs.qtd;
+				tmp.initValue = currentArgs.initValue + param[idx].first;
+				bbqueue.push(tmp);
+			}
+		}
+	}
 
 	idx = bestSolution;
 }
