@@ -126,7 +126,7 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	}
 
 	// Testando se a solução é válida
-	bitset<16>answ(maxPoss);
+	bitset<32>answ(maxPoss);
 
 	// Fazendo a impressão da resposta em tela
 	cerr << endl << "Resposta binaria: " << answ << endl;
