@@ -92,5 +92,21 @@ int main(int argc, char *argv[]){
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
 
+	// Execução do algoritmo Branch & Bound
+	cout << "\nEXECUTANDO A BRANCH AND BOUND DEPTH FIRST" << "\n";
+	start = clock();
+	branchAndBoundDepthFirst(valueWeight, maxWeight, ids, &count);
+	end = clock();
+
+	printResult(valueWeight, start, end, ids, count);
+	ids.clear();
+
+	cout << "\nEXECUTANDO A BRANCH AND BOUND BREADTH FIRST" << "\n";
+	start = clock();
+	branchAndBoundBreadthFirst(valueWeight, maxWeight, ids, &count);
+	end = clock();
+
+	printResult(valueWeight, start, end, ids, count);
+	ids.clear();
 	return 0;
 }
