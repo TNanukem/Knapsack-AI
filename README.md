@@ -19,9 +19,9 @@ This project was originally developed by:
 The main objective of this assignment is to use blind-searches and heuristic searches in order to find a solution to our problem.
 
 # To-Do
-* Branch and Bound Algorithm (Shinji)
+* ~Branch and Bound Algorithm (Shinji)~
 * ~Scripted version to generate the output (Grande)~
-* Merge the recursive branch into dev
+* ~Merge the recursive branch into dev (Bruno)~
 * Python script / Jupyter-Notebook for Data Analysis (Grande)
-* Test-cases generator (Patinhas)
+* ~Test-cases generator (Patinhas)~
 * Report
