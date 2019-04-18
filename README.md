@@ -24,5 +24,6 @@ The main objective of this assignment is to use blind-searches and heuristic sea
 * ~Merge the recursive branch into dev (Bruno)~
 * ~Python script / Jupyter-Notebook for Data Analysis (Tiago)~
 * ~Test-cases generator (Estevam)~
-* ~Correct number of steps from the Branch and Bound Algorithms~ (Henry)
+* Correct number of steps from the Branch and Bound Algorithms (Henry)
+* Create Makefile and correct running structure (Tiago)
 * Report
