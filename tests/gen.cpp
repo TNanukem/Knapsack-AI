@@ -7,7 +7,7 @@ int main(void){
 	vector<pair<double, double>> v;
 	srand(time(NULL));
 	string filename;
-	for(int i=8;i<=30;i++){
+	for(int i=8;i<=800;i++){
 		filename = to_string(i) + "-test.txt";
 		freopen(filename.c_str(), "w", stdout);
 
