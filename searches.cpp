@@ -1,6 +1,6 @@
 #include "searches.h"
 
-void printResult(vector<pair<double,double>> weights, clock_t start, clock_t end, vector<int> ids, int count){
+void printResult(vector<pair<double,double>> weights, clock_t start, clock_t end, vector<int> ids, long long int count){
 	cout << "Numero de passos: " << count << "\n";
 	cout << "Itens: " << "\n";
 	int valueSum = 0;
@@ -48,7 +48,7 @@ int findMaxPos(vector<pair<double, int>> v) {
 	o vetor de objetos e o tamanho máximo da mochila.
 */
 
-void bestFitSearch(vector<pair<double, double>> param, double maxWeight, vector<int> &ids, int *count) {
+void bestFitSearch(vector<pair<double, double>> param, double maxWeight, vector<int> &ids, long long int *count) {
 	// param: pares da forma valor - peso
 	vector<pair<double, int>> costPerWeight;
 	// Monta um vetor com valor/peso para realizar uma heurística gulosa
@@ -97,8 +97,7 @@ void bestFitSearch(vector<pair<double, double>> param, double maxWeight, vector<
 	de entrada a lista de objetos e o tamanho máximo da mochila. Então, itera sobre todas
 	as possibilidades de inserção até encontrar a solução ótima.
 */
-pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight, vector<int> &ids, int *count){
-
+pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, double maxWeight, vector<int> &ids, long long int *count){
 	// Calcula o número de possibilidades
 	int maxNum = 1 << param.size();
 	// Itera sobre todas as possibilidades
@@ -132,12 +131,12 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	}
 
 	// Testando se a solução é válida
-	bitset<16>answ(maxPoss);
+	bitset<32>answ(maxPoss);
 
 	// Fazendo a impressão da resposta em tela
-	cerr << endl << "Resposta binaria: " << answ << endl;
+	//cerr << endl << "Resposta binaria: " << answ << endl;
 
-	cout << "Valor maximo: " << maxValue << endl;
+	//cout << "Valor maximo: " << maxValue << endl;
 
 	for(int i = 0; i < (int)answ.size(); i++){
 		if(answ[i] == 1){
@@ -148,7 +147,19 @@ pair<double, int> iterativeBlindSearch(vector<pair<double, double>> param, doubl
 	// Retorna o par maxValue, maxPoss para que a resposta possa ser reescrita
 	return make_pair(maxValue, maxPoss);
 }
-
+// Retorna o valor máximo
+double recursiveBlindSearch(vector<pair<double, double>> param, double maxWeight, int curIdx, double curWeight, double curValue, long long int *count){
+	*count = *count + 1;
+	if(curIdx >= param.size()){
+		return 0;
+	}
+	if(curWeight > maxWeight){
+		return -0x3f3f3f3f;
+	}
+	double valcoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight + param[curIdx].second, curValue + param[curIdx].first, count);
+	double valncoloca = recursiveBlindSearch(param, maxWeight, curIdx+1, curWeight, curValue, count);
+	return max(valcoloca, valncoloca);
+}
 
 /* Branch and Bound */
 /* Função de comparação de pesos proporcionais
@@ -161,7 +172,7 @@ bool weightsCmp(pair<double, int> &w1, pair<double, int> &w2) {
  * de mochila binária (ou seja, solução do problema de
  * mochila inteira)
  * Retorno: true se o problema é factível */
-bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, vector<double> &qtd, vector<bool> fixedValues, int *count, double *finalValue) {
+bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, vector<double> &qtd, vector<bool> fixedValues, long long int *count, double *finalValue) {
 	if(maxWeight < 0) {
 		return false;
 	}
@@ -216,7 +227,7 @@ bool relaxedKsnapsack (vector<pair<double, double> > &param, double maxWeight, v
 	return true;
 }
 
-void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWeight, vector<double> &qtd, vector<bool> &fixedValues, int *count, double *currMax, vector<int> &currSolution, double initValue) {
+void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWeight, vector<double> &qtd, vector<bool> &fixedValues, long long int *count, double *currMax, vector<int> &currSolution, double initValue) {
 	(*count)++;
 	double value = initValue;
 
@@ -272,7 +283,7 @@ void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWei
 	}
 }
 
-void branchAndBoundDepthFirst(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, int *count) {
+void branchAndBoundDepthFirst(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, long long int *count) {
 	*count = 0;
 	double currMax = 0;
 	vector<int> bestSolution;
@@ -295,7 +306,7 @@ void branchAndBoundDepthFirst(vector<pair<double, double>> param, double maxWeig
 	idx = bestSolution;
 }
 
-void branchAndBoundBreadthFirst(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, int *count) {
+void branchAndBoundBreadthFirst(vector<pair<double, double>> param, double maxWeight, vector<int> &idx, long long int *count) {
 	*count = 0;
 	double currMax = 0;
 	vector<int> bestSolution;

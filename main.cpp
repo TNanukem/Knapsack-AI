@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 	double maxWeight;
 
 	vector <int> ids;
-	int count = 0;
+	long long int count = 0;
 
 	// Interface com arquivo
 	fstream inFile;
@@ -66,12 +66,19 @@ int main(int argc, char *argv[]){
 
 	// Execução da Busca Cega
 	cout << "\nEXECUTANDO A BLIND SEARCH" << "\n";
+	// Execução da Busca Cega Iterativa
 	clock_t start = clock();
 	iterativeBlindSearch(valueWeight, maxWeight, ids, &count);
 	clock_t end = clock();
-
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
+
+	// Execução da Busca Cega Recursiva
+	cout << "EXECUTANDO A BLIND SEARCH RECUSIVA" << endl;
+	start = clock();
+	recursiveBlindSearch(valueWeight, maxWeight, 0, 0, 0, &count);
+	end = clock();
+	printResult(valueWeight, start, end, ids, count);
 
 	// Execução do algoritmo Best-Fit
 	cout << "\nEXECUTANDO A BEST-FIT SEARCH" << "\n";
