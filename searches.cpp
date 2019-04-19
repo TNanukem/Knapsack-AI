@@ -230,14 +230,16 @@ void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWei
 	}
 
 	bool allInteger = true;
-	vector<pair<double, int>> dist; // vetor de distancia de 0.5 até qtd
-	dist.reserve(qtd.size());
+	// vector<pair<double, int>> dist; // vetor de distancia de 0.5 até qtd
+	// dist.reserve(qtd.size());
+	int idx = 0;
 	for(int i = 0; i < qtd.size(); i++) {
-		if(qtd[i] == 0 || qtd[i] == 1) {
-			dist.push_back(make_pair(0.5, i));
-		} else {
+		if(qtd[i] != 0 && qtd[i] != 1) {
+		// 	dist.push_back(make_pair(0.5, i));
+		// } else {
+			idx = i;
 			allInteger = false;
-			dist.push_back(make_pair(abs(0.5 - qtd[i]), i));
+			// dist.push_back(make_pair(abs(0.5 - qtd[i]), i));
 		}
 	}
 
@@ -253,8 +255,8 @@ void branchAndBound_recursive(vector<pair<double, double>> &param, double maxWei
 		}
 	} else { // se a solução tem um valor não inteiro ..
 		// selecionamos o item mais fracionado (mais perto de 0.5) ..
-		sort(dist.begin(), dist.end(), weightsCmp);
-		int idx = dist.back().second;
+		// sort(dist.begin(), dist.end(), weightsCmp);
+		// int idx = dist.back().second;
 		fixedValues[idx] = true;
 
 		// e rodamos o algorítmo novamente setando a quantidade desse item
@@ -335,14 +337,16 @@ void branchAndBoundBreadthFirst(vector<pair<double, double>> param, double maxWe
 		 * uma solução já existente, a solução não é desenvolvida */
 		if(isPossible && value > currMax) {
 			bool allInteger = true;
-			vector<pair<double, int>> dist; // vetor de distancia de 0.5 até qtd
-			dist.reserve(currentArgs.qtd.size());
+			// vector<pair<double, int>> dist; // vetor de distancia de 0.5 até qtd
+			// dist.reserve(currentArgs.qtd.size());
+			int idx = 0;
 			for(int i = 0; i < currentArgs.qtd.size(); i++) {
-				if(currentArgs.qtd[i] == 0 || currentArgs.qtd[i] == 1) {
-					dist.push_back(make_pair(0.5, i));
-				} else {
+				if(currentArgs.qtd[i] != 0 && currentArgs.qtd[i] != 1) {
+				// 	dist.push_back(make_pair(0.5, i));
+				// } else {
+					idx = i;
 					allInteger = false;
-					dist.push_back(make_pair(abs(0.5 - currentArgs.qtd[i]), i));
+					// dist.push_back(make_pair(abs(0.5 - currentArgs.qtd[i]), i));
 				}
 			}
 
@@ -358,8 +362,8 @@ void branchAndBoundBreadthFirst(vector<pair<double, double>> param, double maxWe
 				}
 			} else { // se a solução tem um valor não inteiro ..
 				// selecionamos o item mais fracionado (mais perto de 0.5) ..
-				sort(dist.begin(), dist.end(), weightsCmp);
-				int idx = dist.back().second;
+				// sort(dist.begin(), dist.end(), weightsCmp);
+				// int idx = dist.back().second;
 				currentArgs.fixedValues[idx] = true;
 
 				// e rodamos o algorítmo novamente setando a quantidade desse item
