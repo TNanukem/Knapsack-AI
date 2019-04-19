@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
 			valueWeight.push_back(make_pair(tmp1, tmp2));
 		}
 	}
-	printf("%s",argv[1]);
+
 	// Execução da Busca Cega
 	cout << "\nEXECUTANDO A BLIND SEARCH" << "\n";
 	// Execução da Busca Cega Iterativa
@@ -72,16 +72,14 @@ int main(int argc, char *argv[]){
 	clock_t end = clock();
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
-	cout << "[TEMPO DE EXECUCAO] Blind search iterativo: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 
 	// Execução da Busca Cega Recursiva
 	cout << "EXECUTANDO A BLIND SEARCH RECUSIVA" << endl;
 	start = clock();
 	recursiveBlindSearch(valueWeight, maxWeight, 0, 0, 0, &count);
 	end = clock();
+	printResult(valueWeight, start, end, ids, count);
 
-	cout << "Numero de Passos:" << count << "\n";
-	cout << "[TEMPO DE EXECUCAO] Blind search recusivo: " << 1000*(float)(end-start)/CLOCKS_PER_SEC  << " ms \n\n";
 	// Execução do algoritmo Best-Fit
 	cout << "\nEXECUTANDO A BEST-FIT SEARCH" << "\n";
 	start = clock();
