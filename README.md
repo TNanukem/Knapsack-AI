@@ -25,5 +25,5 @@ The main objective of this assignment is to use blind-searches and heuristic sea
 * ~Python script / Jupyter-Notebook for Data Analysis (Tiago)~
 * ~Test-cases generator (Estevam)~
 * Correct number of steps from the Branch and Bound Algorithms (Henry)
-* Create Makefile and correct running structure (Tiago)
+* ~Create Makefile and correct running structure (Tiago)~
 * Report
