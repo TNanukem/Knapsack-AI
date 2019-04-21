@@ -73,13 +73,6 @@ int main(int argc, char *argv[]){
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
 
-	// Execução da Busca Cega Recursiva
-	cout << "EXECUTANDO A BLIND SEARCH RECUSIVA" << endl;
-	start = clock();
-	recursiveBlindSearch(valueWeight, maxWeight, 0, 0, 0, &count);
-	end = clock();
-	printResult(valueWeight, start, end, ids, count);
-
 	// Execução do algoritmo Best-Fit
 	cout << "\nEXECUTANDO A BEST-FIT SEARCH" << "\n";
 	start = clock();
