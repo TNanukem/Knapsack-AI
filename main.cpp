@@ -1,9 +1,9 @@
 /*
-	Trabalho 1 de Inteligência Artificial
-	Resolução do problema de uma mochila binária (knapsack)
-	utilizando algoritmos de busca cega e busca heurística.
+	Artificial Intelligence - Assignment 1
+	Solving a knapsack problem using blind search and 
+	heuristic search algorithms.
 
-	Desenvolvido por:
+	Developed por:
 	Augusto Ribeiro (https://github.com/GuttinRibeiro)
 	Bruno Arantes (https://github.com/brunoaamello)
 	Estevam Arantes (https://github.com/Es7evam)
@@ -12,17 +12,13 @@
 	Osmar Chen (https://github.com/osmarchen)
 	Tiago Toledo Jr (https://github.com/TNanukem)
 
-	Este arquivo é o executavel da interface com o usuário, utilize-o para
-	verificar o funcionamento do trabalho.
-
-	Você pode utilizar algum dos casos de teste disponíveis na pasta tests.
-
+	This archive runs the assignment with user interface to be tested.
 */
 #include "searches.h"
 
 int main(int argc, char *argv[]){
 
-	// Declara um vetor de objetos e o (n)úmero de objetos
+	// Declares a vector of objects and the (n)umber of objects
 
 	vector <pair<double, double>> valueWeight;
 	int n;
@@ -31,23 +27,22 @@ int main(int argc, char *argv[]){
 	vector <int> ids;
 	long long int count = 0;
 
-	// Interface com arquivo
+	// Archive interface
 	fstream inFile;
 
 
-	 /* Escaneia os n objetos e insere eles no vetor
-	 * Os objetos são compostos pelo par valor e peso
+	 /* Scans the n objects defined by the pair (value, weigth)
 	 */
 
 	double tmp1, tmp2;
 	if(argc < 2){
-		cout << "Por favor insira o numero maximo de elementos e o peso maximo da mochila" << endl;
+		cout << "Please insert the max number of ekements and the maximum weight of the knapsack" << endl;
 		cin >> n >> maxWeight;
-		cout << "Por favor, insira os pares valor peso dos itens a serem colocados na mochila" << endl;
+		cout << "Please insert the pair of value and weight of the itens to be inserted" << endl;
 	}else{
 		inFile.open(argv[1], ios::in);
 		if(!inFile.is_open()){
-			cout << "Erro ao abrir o arquivo!" << endl;
+			cout << "Error when opening the archive!" << endl;
 			exit(1);
 		}
 		inFile >> n >> maxWeight;
@@ -64,17 +59,15 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	// Execução da Busca Cega
-	cout << "\nEXECUTANDO A BLIND SEARCH" << "\n";
-	// Execução da Busca Cega Iterativa
+
+	cout << "\nBLIND SEARCH" << "\n";
 	clock_t start = clock();
 	iterativeBlindSearch(valueWeight, maxWeight, ids, &count);
 	clock_t end = clock();
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
 
-	// Execução do algoritmo Best-Fit
-	cout << "\nEXECUTANDO A BEST-FIT SEARCH" << "\n";
+	cout << "\n BEST-FIT SEARCH" << "\n";
 	start = clock();
 	bestFitSearch(valueWeight, maxWeight, ids, &count);
 	end = clock();
@@ -82,8 +75,7 @@ int main(int argc, char *argv[]){
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
 
-	// Execução do algoritmo Branch & Bound
-	cout << "\nEXECUTANDO A BRANCH AND BOUND DEPTH FIRST" << "\n";
+	cout << "\n BRANCH AND BOUND DEPTH FIRST" << "\n";
 	start = clock();
 	branchAndBoundDepthFirst(valueWeight, maxWeight, ids, &count);
 	end = clock();
@@ -91,7 +83,7 @@ int main(int argc, char *argv[]){
 	printResult(valueWeight, start, end, ids, count);
 	ids.clear();
 
-	cout << "\nEXECUTANDO A BRANCH AND BOUND BREADTH FIRST" << "\n";
+	cout << "\n BRANCH AND BOUND BREADTH FIRST" << "\n";
 	start = clock();
 	branchAndBoundBreadthFirst(valueWeight, maxWeight, ids, &count);
 	end = clock();

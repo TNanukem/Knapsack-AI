@@ -1,5 +1,5 @@
-# Este script em python gera o cabeçalho do arquivo .csv usado na análise
-# e também roda o nosso analisador para o número de caso de testes que nós temos.
+# This python scripts runs all the 800 test cases and creates an .csv output to
+# be analized.
 
 import os
 

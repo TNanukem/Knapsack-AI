@@ -1,7 +1,7 @@
 /*
-	Trabalho 1 de Inteligência Artificial
-	Resolução do problema de uma mochila binária (knapsack)
-	utilizando algoritmos de busca cega e busca heurística.
+	Artificial Intelligence - Assignment 1
+	Solving a knapsack problem using blind search and 
+	heuristic search algorithms.
 
 	Desenvolvido por:
 	Augusto Ribeiro (https://github.com/GuttinRibeiro)
@@ -12,15 +12,12 @@
 	Osmar Chen (https://github.com/osmarchen)
 	Tiago Toledo Jr (https://github.com/TNanukem)
 
-	Esse é um arquivo feito para gerar um .csv que será analisado por um
-	script em Python. Por favor, não o execute na linha de comando.
+	This archive generates a .csv to be analyzed.
 
 */
 #include "searches.h"
 
 int main(int argc, char *argv[]){
-
-	// Declara um vetor de objetos e o (n)úmero de objetos
 
 	vector <pair<double, double>> valueWeight;
 	int n;
@@ -29,13 +26,7 @@ int main(int argc, char *argv[]){
 	vector <int> ids;
 	long long int count = 0;
 
-	// Interface com arquivo
 	fstream inFile;
-
-
-	 /* Escaneia os n objetos e insere eles no vetor
-	 * Os objetos são compostos pelo par valor e peso
-	 */
 
 	double tmp1, tmp2;
 	if(argc < 2){
@@ -61,7 +52,7 @@ int main(int argc, char *argv[]){
 	}
 
 
-	// Execução da Busca Cega
+	// Blind Search
 	clock_t start = clock();
 	iterativeBlindSearch(valueWeight, maxWeight, ids, &count);
 	clock_t end = clock();
@@ -80,7 +71,7 @@ int main(int argc, char *argv[]){
 
 	ids.clear();
 
-	// Execução do algoritmo Best-Fit
+	// Best-First
 	start = clock();
 	bestFitSearch(valueWeight, maxWeight, ids, &count);
 	end = clock();
@@ -97,7 +88,7 @@ int main(int argc, char *argv[]){
 
 	ids.clear();
 
-	// Execução do algoritmo Branch and Bound em Profundidade
+	// Branch and Bound Depth First
 	start = clock();
 	branchAndBoundDepthFirst(valueWeight, maxWeight, ids, &count);
 	end = clock();
@@ -114,7 +105,7 @@ int main(int argc, char *argv[]){
 
 	ids.clear();
 
-	// Execução do algoritmo Branch and Bound em Largura
+	// Branch and Bound Breadth First
 	start = clock();
 	branchAndBoundBreadthFirst(valueWeight, maxWeight, ids, &count);
 	end = clock();
